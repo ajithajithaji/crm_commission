@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Create a crm commission model tree view-->
+    <record id="crm_commission_tree_view" model="ir.ui.view">
+        <field name="name">crm.commission.tree.view</field>
+        <field name="model">crm.commission</field>
+        <field name="arch" type="xml">
+            <tree string="Commission Plan">
+                <field name="name"/>
+                <field name="commission_type"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+            </tree>
+        </field>
+    </record>
+    <!--    create a crm commission model form view-->
+    <record id="crm_commission_form_view" model="ir.ui.view">
+        <field name="name">crm.commission.form.view</field>
+        <field name="model">crm.commission</field>
+        <field name="arch" type="xml">
+            <form string="Commission Plan">
+                <sheet>
+                    <group>
+                        <field name="name"
+                               style="margin-right:1250px;font-size:50px"/>
+                        <group>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                            <field name="commission_type"/>
+                            <field name="active"/>
+                            <field name="revenue_type"
+                                   attrs="{'invisible':
+                                   [('commission_type','!=','revenue_wise')]}"/>
+                        </group>
+                    </group>
+                    <notebook
+                            attrs="{'invisible':
+                            [('commission_type','!=','product_wise')]}">
+                        <page string="Product Wise">
+                            <field name="product_wise_ids" string="Product">
+                                <tree editable="bottom">
+                                    <field name="product_id" string="Product"/>
+                                    <field name="product_category_id"
+                                           string="Product Category"/>
+                                    <field name="rate_percentage"
+                                           string="Rate %"/>
+                                    <field name="max_commission_amount"
+                                           string="Maximum Commission Amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <notebook
+                            attrs="{'invisible':
+                            [('commission_type','!=','revenue_wise')]}">
+                        <page string="Revenue Wise">
+                            <field name="revenue_wise_ids" string="Revenue">
+                                <tree editable="bottom">
+
+                                    <field name="sequence" string="Sequence" widget="handle"/>
+                                    <field name="from_amount"
+                                           string="From Amount"/>
+                                    <field name="to_amount" string="To Amount"/>
+                                    <field name="rate" string="Rate"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    create an action for crm commission model-->
+    <record id="crm_commission_action" model="ir.actions.act_window">
+        <field name="name">Commission Plan</field>
+        <field name="res_model">crm.commission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Commission Plans
+            </p>
+            <p>
+                Manage all your Commission Plans
+            </p>
+            <p>
+                Each Commission Plans may include.
+            </p>
+        </field>
+    </record>
+    <!--Here I have created main menu item for crm commission-->
+    <menuitem id="crm_commission_menu_root" name="Commission">
+        <menuitem id="crm_commission_first_level_menu" name="Commission Plan"
+                  sequence="3"/>
+    </menuitem>
+    <!--    Here the action has called and selected as a menu-->
+    <menuitem id="crm_commission_model_menu_action"
+              action="crm_commission_action"
+              parent="crm_commission_first_level_menu" sequence="3"/>
+
+</odoo>
